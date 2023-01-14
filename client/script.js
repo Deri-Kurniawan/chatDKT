@@ -3,6 +3,7 @@ import user from "./assets/user.svg";
 
 const form = document.querySelector("form");
 const chatContainer = document.querySelector("#chat_container");
+const chatPrompt = document.querySelector("[name=prompt]");
 
 let loadInterval;
 
@@ -57,9 +58,10 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   const data = new FormData(form);
+  chatPrompt.value = "";
 
   // User's chat stripe
-  chatContainer.innerHTML += chatStripe(false, data.get("prompt"));
+  chatContainer.innerHTML += chatStripe(false, data.get("prompt"), "");
 
   // Bot's chat stripe
   const uniqueId = generateUniqueId();
@@ -72,7 +74,6 @@ const handleSubmit = async (e) => {
   loader(messageDiv);
 
   // fetch data from the server
-
   const response = await fetch("http://localhost:3000", {
     method: "POST",
     headers: {
@@ -96,7 +97,7 @@ const handleSubmit = async (e) => {
 
     messageDiv.innerHTML = "Something went wrong!";
 
-    alert(error);
+    console.error(error);
   }
 };
 
